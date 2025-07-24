@@ -1,29 +1,27 @@
-# Stage 1: Build Vite frontend
+# Build Stage
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the full source and build it
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
+# Serve Stage with Express
+FROM node:18-alpine
 
-# Remove default config
-RUN rm /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Copy custom config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install express
+COPY package*.json ./
+RUN npm install express
 
-# Copy the built frontend files
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy built files and server
+COPY --from=builder /app/dist ./dist
+COPY server.js .
 
-# Expose default Nginx port
-EXPOSE 80
+EXPOSE 3000
+CMD ["node", "server.js"]
 
-CMD ["nginx", "-g", "daemon off;"]
