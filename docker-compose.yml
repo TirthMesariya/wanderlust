@@ -1,26 +1,27 @@
 version: '3'
-
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
     ports:
-      - "80:80"
-    depends_on:
-      - backend
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://52.54.173.42:5000
 
   backend:
-    build: ./backend
-    expose:
-      - "5000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env.sample
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
-    volumes:
-      - mongo-data:/data/db
+    container_name: mongodb
     ports:
       - "27017:27017"
-
-volumes:
-  mongo-data:
+    volumes:
+      - ./backend/data:/data
