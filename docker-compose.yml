@@ -3,10 +3,11 @@ services:
   frontend:
     build:
       context: ./frontend
+    env_file:
+      - /.frontend/.env.sample
     ports:
       - "5173:5173"
-    environment:
-      - VITE_API_URL=http://52.54.173.42:5000
+  
 
   backend:
     build:
