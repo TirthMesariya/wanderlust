@@ -80,6 +80,41 @@ wanderlust-main/
 - Docker Health Checks
 
 ---
++----------------+
+| Docker         |
+| Containers     |
++--------+-------+
+         |
+         v
++----------------+
+| cAdvisor       |
+| Collects       |
+| Container      |
+| Metrics        |
++--------+-------+
+         |
+         v
++----------------+
+| Prometheus     |
+| Scrapes        |
+| Metrics        |
++--------+-------+
+         |
+         v
++----------------+
+| Grafana        |
+| Dashboards     |
+| Visualization  |
++----------------+
+
+Service	Port : 
+
+Frontend	80
+Backend	5000
+Prometheus	9090
+Grafana	3000
+cAdvisor	8081
+
 
 ## Technologies Used
 
@@ -294,7 +329,6 @@ The workflow automatically:
 - HTTPS
 - Prometheus
 - Grafana
-- Kubernetes Deployment
 
 ---
 
