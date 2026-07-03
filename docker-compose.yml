@@ -40,7 +40,7 @@ services:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: unless-stopped
 
-  # -------------------------
+  # ------------------------
   # Grafana
   # -------------------------
   grafana:
@@ -70,5 +70,5 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
 
-volumes:
-  grafana-storage:
+volumes: 
+    grafana-storage:
