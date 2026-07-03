@@ -8,8 +8,8 @@ services:
     env_file:
       - ./frontend/.env
     depends_on:
-      - backend
-         condition: service_healthy
+      backend:
+        condition: service_healthy
 
   backend:
     build: ./backend
@@ -23,4 +23,52 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
-  
+
+    # Allows the backend container to access your local MongoDB
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # -------------------------
+  # Prometheus
+  # -------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+  # -------------------------
+  # Grafana
+  # -------------------------
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    restart: unless-stopped
+
+  # -------------------------
+  # cAdvisor
+  # -------------------------
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    privileged: true
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+
+volumes:
+  grafana-storage:
