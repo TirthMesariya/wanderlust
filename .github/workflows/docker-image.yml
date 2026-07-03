@@ -1,40 +1,35 @@
-name: Docker Image CI
+name: Docker Deployment
 
 on:
   push:
     branches:
       - main
 
-
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted
 
-
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Check Docker
+      - name: Verify Docker
         run: |
-               docker --version
-               docker compose version
+          docker --version
+          docker compose version
 
-      - name: Stop Old Containers
+      - name: Stop Existing Containers
         run: |
-               docker compose down || true
+          docker compose down || true
 
       - name: Build Images
         run: |
-               docker compose build
+          docker compose build --no-cache
 
       - name: Start Containers
         run: |
-               docker compose up -d
+          docker compose up -d
 
-
-
-      - name: Verify
+      - name: Verify Running Containers
         run: |
           docker ps
