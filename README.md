@@ -118,7 +118,7 @@ Install:
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/wanderlust-main.git
+git clone https://github.com/Tirthmesariya/wanderlust-main.git
 
 cd wanderlust-main
 ```
